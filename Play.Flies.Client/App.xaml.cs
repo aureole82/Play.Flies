@@ -1,17 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Play.Flies.Client
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    /// <summary> Interaction logic for App.xaml. </summary>
+    public partial class App
     {
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            foreach (var disposable in Resources.Values.OfType<IDisposable>())
+            {
+                disposable.Dispose();
+            }
+        }
     }
 }

@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="Play.Flies.Client.Views.EditView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Play.Flies.Client.ViewModels.Edit"
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="800"
+             Background="Black" Foreground="#EEEEEE" FontSize="16"
+             d:DataContext="{d:DesignInstance vm:EditViewModel, d:IsDesignTimeCreatable=True}">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <TextBlock Text="Folder: " VerticalAlignment="Center" />
+            <Button DockPanel.Dock="Right" Content="Refresh" Style="{StaticResource DarkButtonStyle}" Command="{Binding LoadImagesCommand}"></Button>
+            <TextBox Text="{Binding ImagePath, Delay=500}" Style="{StaticResource DarkTextBoxStyle}" TextAlignment="Left" />
+        </DockPanel>
+        <DataGrid ItemsSource="{Binding Images}" AutoGenerateColumns="False"
+                  Background="Transparent" RowBackground="Transparent" Foreground="{StaticResource ForegroundBrush}"
+                  AlternatingRowBackground="#22FFFFFF">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Padding" Value="1" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Image" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type vm:ImageViewModel}">
+                            <Image Source="{Binding Preview}" MaxHeight="120" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Filename" Binding="{Binding Image.Filename}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Title" Binding="{Binding Image.Title}" />
+                <DataGridTextColumn Header="Trivia" Binding="{Binding Image.Trivia}" MaxWidth="300">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="AcceptsReturn" Value="true" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type vm:ImageViewModel}">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                <Button Content="Update" Style="{StaticResource DarkButtonStyle}" Command="{Binding UpdateCommand}" />
+                                <Button Content="Revert" Style="{StaticResource DarkButtonStyle}" Command="{Binding RevertCommand}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

@@ -35,14 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SimpleInjector, Version=3.3.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleInjector.3.3.2\lib\net45\SimpleInjector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -55,6 +55,42 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Architecture\ModelBase.cs" />
+    <Compile Include="Architecture\ObservableModel.cs" />
+    <Compile Include="Helper\ImageExtensions.cs" />
+    <Compile Include="Helper\ColorExtensions.cs" />
+    <Compile Include="Helper\LinqExtensions.cs" />
+    <Compile Include="Models\Messages\DigitKeyPressedMessage.cs" />
+    <Compile Include="Models\Messages\LetterKeyPressedMessage.cs" />
+    <Compile Include="Resources\Constants.cs" />
+    <Compile Include="Services\IContainer.cs" />
+    <Compile Include="Services\Implementations\ImageService.cs" />
+    <Compile Include="Services\Implementations\ImageServiceFactory.cs" />
+    <Compile Include="Services\IImageService.cs" />
+    <Compile Include="Services\IImageServiceFactory.cs" />
+    <Compile Include="Services\IMessageService.cs" />
+    <Compile Include="Services\Implementations\MessageService.cs" />
+    <Compile Include="Services\PreferredConstructorAttribute.cs" />
+    <Compile Include="Services\Implementations\PreferredConstructorResolutionBehavior.cs" />
+    <Compile Include="Services\Implementations\SimpleInjectorContainer.cs" />
+    <Compile Include="Services\Implementations\DesignImageService.cs" />
+    <Compile Include="Services\Implementations\DesignImageServiceFactory.cs" />
+    <Compile Include="ViewModels\Edit\EditViewModel.cs" />
+    <Compile Include="Models\ImageModel.cs" />
+    <Compile Include="ViewModels\ITabViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\CoverViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\PlayerViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\QuizViewModel.cs" />
+    <Compile Include="Architecture\RelayCommand.cs" />
+    <Compile Include="Architecture\ViewModelBase.cs" />
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Views\EditView.xaml.cs">
+      <DependentUpon>EditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\QuizView.xaml.cs">
+      <DependentUpon>QuizView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,34 +103,26 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\EditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\QuizView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+    <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

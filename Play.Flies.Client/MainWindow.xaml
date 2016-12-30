@@ -3,10 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Play.Flies.Client"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        xmlns:vm="clr-namespace:Play.Flies.Client.ViewModels"
+        xmlns:v="clr-namespace:Play.Flies.Client.Views"
+        xmlns:quiz="clr-namespace:Play.Flies.Client.ViewModels.Quiz"
+        xmlns:edit="clr-namespace:Play.Flies.Client.ViewModels.Edit"
+        mc:Ignorable="d" Title="Drop Like Flies" Height="1024" Width="1900"
+        DataContext="{Binding MainViewModel, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type quiz:QuizViewModel}">
+            <v:QuizView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type edit:EditViewModel}">
+            <v:EditView />
+        </DataTemplate>
+    </Window.Resources>
+    <DockPanel>
+        <ListBox DockPanel.Dock="Top" ItemsSource="{Binding ViewModels}" SelectedItem="{Binding SelectedViewModel}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:ITabViewModel}">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ListBox>
+        <ContentControl Content="{Binding SelectedViewModel}" />
+    </DockPanel>
 </Window>
