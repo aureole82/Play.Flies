@@ -4,14 +4,13 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ImageMagick;
 using Play.Flies.Client.Models;
 
 namespace Play.Flies.Client.Services.Implementations
 {
     internal class ImageService : IImageService
     {
-        private const int TitleId = 0x9C9F;
-        private const int CommentId = 0x9C9C;
         private readonly Encoding _encoding = Encoding.UTF7;
         private readonly string _path;
 
@@ -32,30 +31,19 @@ namespace Play.Flies.Client.Services.Implementations
         public void Update(ImageModel model)
         {
             var filename = Path.Combine(_path, model.Filename);
-            bool titleOk;
-            bool commentOk;
+
             using (var stream = new MemoryStream())
             {
-                using (var image = Image.FromFile(filename))
+                using (var image = new MagickImage(filename))
                 {
-                    titleOk = UpdateMetadata(image, TitleId, model.Title);
-                    commentOk = UpdateMetadata(image, CommentId, model.Trivia);
+                    var profile = new ExifProfile();
+                    profile.SetValue(ExifTag.ImageDescription, model.Title);
+                    profile.SetValue(ExifTag.XPComment, _encoding.GetBytes(model.Trivia));
+                    image.AddProfile(profile);
 
-                    if (titleOk || commentOk)
-                    {
-                        image.Save(stream, GetExtension(model.Filename));
-                    }
+                    image.Write(stream);
                 }
                 File.WriteAllBytes(filename, stream.GetBuffer());
-            }
-
-            if (!titleOk)
-            {
-                AddMetadata(filename, TitleId, model.Title);
-            }
-            if (!commentOk)
-            {
-                AddMetadata(filename, CommentId, model.Trivia);
             }
 
             model.HasChanged = false;
@@ -96,26 +84,20 @@ namespace Play.Flies.Client.Services.Implementations
 
         private ImageModel Load(string filename)
         {
-            using (var image = Image.FromFile(Path.Combine(_path, filename)))
+            using (var image = new MagickImage(filename))
             {
-                var items = image.PropertyItems.ToDictionary(item => item.Id, item => _encoding.GetString(item.Value));
-                var title = GetMetadata(items, TitleId);
-                var trivia = GetMetadata(items, CommentId);
+                var profile = image.GetExifProfile();
+                var title = profile?.GetValue(ExifTag.ImageDescription)?.Value as string;
+                var trivia = profile?.GetValue(ExifTag.XPComment)?.Value as byte[];
 
                 return new ImageModel
                 {
                     Filename = Path.GetFileName(filename),
                     Title = title,
-                    Trivia = trivia,
+                    Trivia = _encoding.GetString(trivia ?? new byte[0]),
                     HasChanged = false
                 };
             }
-        }
-
-        private static string GetMetadata(IReadOnlyDictionary<int, string> items, int key)
-        {
-            string value;
-            return !items.TryGetValue(key, out value) ? null : value.Replace("\0", "");
         }
 
         private static bool UpdateMetadata(Image image, int key, string value)

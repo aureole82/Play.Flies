@@ -11,12 +11,15 @@ namespace Play.Flies.Client.ViewModels.Edit
 {
     public class EditViewModel : ViewModelBase, ITabViewModel
     {
+        private readonly ContextModel _context;
         private readonly IImageServiceFactory _factory;
         private IImageService _service;
 
         [PreferredConstructor]
-        public EditViewModel(IImageServiceFactory factory)
+        public EditViewModel(ContextModel context, IImageServiceFactory factory)
         {
+            _context = context;
+            _imagePath = context.ImagePath;
             _factory = factory;
             _service = factory.Create(ImagePath);
             LoadImagesCommand = new RelayCommand(LoadImages);
@@ -24,7 +27,7 @@ namespace Play.Flies.Client.ViewModels.Edit
             LoadImages();
         }
 
-        public EditViewModel() : this(new DesignImageServiceFactory())
+        public EditViewModel() : this(null, new DesignImageServiceFactory())
         {
         }
 
@@ -43,7 +46,7 @@ namespace Play.Flies.Client.ViewModels.Edit
 
         #region Bindable properties and commands.
 
-        private string _imagePath = @"Images";
+        private string _imagePath;
 
         public string ImagePath
         {
@@ -54,6 +57,7 @@ namespace Play.Flies.Client.ViewModels.Edit
                 _imagePath = value;
 
                 _service = _factory.Create(ImagePath);
+                _context.ImagePath = _imagePath;
                 LoadImages();
                 OnPropertyChanged();
             }

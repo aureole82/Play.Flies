@@ -103,19 +103,22 @@
                     </StackPanel>
 
                 </Grid>
-                <Button Style="{StaticResource DarkButtonStyle}" Content="Discover (D)"
+                <Button Style="{StaticResource DarkButtonStyle}" Content="Discover"
                         Command="{Binding DiscoverOneCommand}" />
-                <Button Style="{StaticResource DarkButtonStyle}" Content="Discover All (A)"
+                <Button Style="{StaticResource DarkButtonStyle}" Content="Discover All"
                         Command="{Binding DiscoverAllCommand}" />
-                <Button Style="{StaticResource DarkButtonStyle}" Content="Cover All (C)"
+                <Button Style="{StaticResource DarkButtonStyle}" Content="Cover All"
                         Command="{Binding CoverAllCommand}" />
+                <Button Style="{StaticResource DarkButtonStyle}" Content="Next Image"
+                        Command="{Binding NextImageCommand}" />
             </StackPanel>
         </Viewbox>
         <Grid Grid.Column="1">
             <Grid.InputBindings>
-                <KeyBinding Key="A" Command="{Binding DiscoverAllCommand}" />
+                <KeyBinding Key="Enter" Command="{Binding DiscoverAllCommand}" />
                 <KeyBinding Key="C" Command="{Binding CoverAllCommand}" />
                 <KeyBinding Key="D" Command="{Binding DiscoverOneCommand}" />
+                <KeyBinding Key="N" Modifiers="Control" Command="{Binding NextImageCommand}" />
                 <KeyBinding Key="D1" Command="{Binding ScorePlayerCommand}" CommandParameter="1" />
                 <KeyBinding Key="D2" Command="{Binding ScorePlayerCommand}" CommandParameter="2" />
                 <KeyBinding Key="D3" Command="{Binding ScorePlayerCommand}" CommandParameter="3" />
@@ -136,13 +139,12 @@
                 <KeyBinding Key="NumPad9" Command="{Binding ScorePlayerCommand}" CommandParameter="9" />
             </Grid.InputBindings>
             <TextBox IsReadOnly="True" Background="#22FFFFFF" Foreground="{StaticResource ForegroundBrush}"
-                     Text="Click here shortcuts: (D)iscover, Discover (A)ll, (C)over all, Increase score Player (1)-(9)">
-                
+                     Text="Click here shortcuts: (D)iscover , Discover All (Enter), (C)over all, (Ctrl+N)ext image, Increase score Player (1)-(9)">
                 <TextBox.LayoutTransform>
                     <RotateTransform Angle="90"></RotateTransform>
                 </TextBox.LayoutTransform>
             </TextBox>
-            <Image x:Name="Image" Source="{Binding Image}" />
+            <Image x:Name="Image" Source="{Binding Image.Preview}" />
             <ItemsControl ItemsSource="{Binding Covers}" Width="{Binding ActualWidth, ElementName=Image}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -158,6 +160,20 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            <Grid TextBlock.Foreground="Black">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Background="#66FFFFFF" Visibility="{Binding ShowTitle, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="{Binding Image.Image.Filename}" FontSize="20" TextAlignment="Center" />
+                    <TextBlock Text="{Binding Image.Image.Title}" FontSize="30" FontWeight="Bold" TextAlignment="Center" />
+                </StackPanel>
+                <StackPanel Grid.Row="2" Background="#66FFFFFF" Visibility="{Binding ShowTrivia, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="{Binding Image.Image.Trivia}" FontSize="30" TextAlignment="Center" TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

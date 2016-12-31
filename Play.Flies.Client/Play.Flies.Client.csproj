@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.0.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\packages\Magick.NET-Q16-AnyCPU.7.0.4.100\lib\net40-client\Magick.NET-Q16-AnyCPU.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SimpleInjector, Version=3.3.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
       <HintPath>..\packages\SimpleInjector.3.3.2\lib\net45\SimpleInjector.dll</HintPath>
       <Private>True</Private>
@@ -60,8 +64,8 @@
     <Compile Include="Helper\ImageExtensions.cs" />
     <Compile Include="Helper\ColorExtensions.cs" />
     <Compile Include="Helper\LinqExtensions.cs" />
-    <Compile Include="Models\Messages\DigitKeyPressedMessage.cs" />
-    <Compile Include="Models\Messages\LetterKeyPressedMessage.cs" />
+    <Compile Include="Models\ContextModel.cs" />
+    <Compile Include="Models\Messages\ImagePathChangedMessage.cs" />
     <Compile Include="Resources\Constants.cs" />
     <Compile Include="Services\IContainer.cs" />
     <Compile Include="Services\Implementations\ImageService.cs" />
